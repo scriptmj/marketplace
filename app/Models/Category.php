@@ -11,6 +11,8 @@ class Category extends Model
 
     protected $fillable = ['name'];
 
+    public $timestamps = false;
+
     public function item(){
         return $this->belongsToMany('App\Models\Item');
     }

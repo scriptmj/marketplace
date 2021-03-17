@@ -9,6 +9,8 @@ class Offer extends Model
 {
     use HasFactory;
 
+    protected $table = 'items_offers';
+
     public function user(){
         return $this->belongsTo('App\Models\User');
     }

@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Advertiser;
+use App\Models\Item;
 
 class UserSeeder extends Seeder
 {
@@ -13,6 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        //
+        User::factory(5)
+            ->create();
     }
 }

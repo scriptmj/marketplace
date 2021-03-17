@@ -21,7 +21,7 @@ class CreateItemsOffersTable extends Migration
 
         Schema::table('items_offers', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('items_id')->constrained();
+            $table->foreignId('item_id')->constrained();
         });
     }
 

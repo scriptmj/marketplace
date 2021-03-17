@@ -18,8 +18,9 @@ class DatabaseSeeder extends Seeder
             AdvertiserSeeder::class,
             CategorySeeder::class,
             ItemSeeder::class,
-            CategoriesItemSeeder::class,
+            CategoriesItemsSeeder::class,
             ItemOfferSeeder::class,
+            ChatMessagesSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
     }
