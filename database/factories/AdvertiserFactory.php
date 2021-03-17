@@ -23,7 +23,7 @@ class AdvertiserFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'items_sold' => rand(0,50),
         ];
     }
 }

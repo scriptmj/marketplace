@@ -22,8 +22,10 @@ class ItemFactory extends Factory
     public function definition()
     {
         return [
-            'item_name' => $this->faker->word,
-            'description' => $this->faker->text,
+            'item_name' => $this->faker->colorName,
+            'shortDescription' => $this->faker->sentence,
+            'longDescription' => $this->faker->text,
+            'image_url' => $this->faker->imageUrl(200, 300),
         ];
     }
 }

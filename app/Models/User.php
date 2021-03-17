@@ -44,4 +44,8 @@ class User extends Authenticatable
     public function advertiser(){
         return $this->hasOne('App\Models\Advertiser');
     }
+
+    public function isAdvertiser(){
+        return $this->advertiser_id != null;
+    }
 }

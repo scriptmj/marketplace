@@ -16,6 +16,7 @@ class CreateAdvertisersTable extends Migration
         Schema::create('advertisers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->integer('items_sold');
         });
     }
 
