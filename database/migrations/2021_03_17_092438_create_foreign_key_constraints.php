@@ -13,14 +13,8 @@ class CreateForeignKeyConstraints extends Migration
      */
     public function up()
     {
-        Schema::table('advertisers', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
-        });
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('advertiser_id')->nullable()->constrained();
-        });
         Schema::table('items', function (Blueprint $table) {
-            $table->foreignId('advertiser_id')->constrained();
+            $table->foreignId('user_id')->constrained();
         });
         // Schema::table('', function (Blueprint $table) {
         //     $table->foreignId('')->constrained();
@@ -43,14 +37,8 @@ class CreateForeignKeyConstraints extends Migration
      */
     public function down()
     {
-        Schema::table('advertisers', function(Blueprint $table){
-            $table->dropForeign('user_id');
-        });
-        Schema::table('users', function(Blueprint $table){
-            $table->dropForeign('advertiser_id');
-        });
         Schema::table('items', function(Blueprint $table){
-            $table->dropForeign('advertiser_id');
+            $table->dropForeign('user_id');
         });
         // Schema::table('', function(Blueprint $table){
         //     $table->dropForeign('');

@@ -24,6 +24,9 @@ Route::get('/view/{item}', 'App\Http\Controllers\ItemController@viewItem')->name
 
 Route::get('/profile/{user}', 'App\Http\Controllers\UserController@viewProfile')->name('view.profile');
 
+Route::get('/item/create', 'App\Http\Controllers\ItemController@create')->name('item.create');
+Route::post('/item/create', 'App\Http\Controllers\ItemController@store')->middleware('auth')->name('item.store');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

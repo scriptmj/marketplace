@@ -19,11 +19,13 @@ class CreateChatMessagesTable extends Migration
             $table->longText('message');
             $table->unsignedBigInteger('from');
             $table->unsignedBigInteger('to');
+            $table->unsignedBigInteger('item_ref')->nullable();
         });
 
         Schema::table('chat_messages', function (Blueprint $table) {
             $table->foreign('from')->references('id')->on('users');
             $table->foreign('to')->references('id')->on('users');
+            $table->foreign('item_ref')->references('id')->on('items');
         });
     }
 

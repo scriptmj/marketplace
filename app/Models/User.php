@@ -41,11 +41,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function advertiser(){
-        return $this->hasOne('App\Models\Advertiser');
-    }
-
-    public function isAdvertiser(){
-        return $this->advertiser_id != null;
+    public function item(){
+        return $this->hasMany('App\Models\Item');
     }
 }

@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Offer;
+use Illuminate\Support\Str;
 
 class Item extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'shortDescription',
-        'longDescription'
+        'item_name',
+        'short_description',
+        'long_description',
+        'image',
+        'user_id',
+        'minimum_bid',
     ];
 
     public function highestBid(){
@@ -27,7 +31,15 @@ class Item extends Model
         }
     }
 
-    public function advertiser(){
-        return $this->belongsTo('App\Models\Advertiser');
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function getImageAttribute($value){
+        if(Str::contains($value, 'https')){
+            return $value;
+        } else {
+            return asset('storage/'.$value);
+        }
     }
 }

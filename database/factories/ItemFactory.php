@@ -14,6 +14,11 @@ class ItemFactory extends Factory
      */
     protected $model = Item::class;
 
+    private $itemList = ["bowl", "beef", "headphones", "key chain", "tooth picks", "stop sign", "scotch tape", "hanger", "shirt", "newspaper", "sand paper", "shawl",
+    "computer", "perfume", "couch", "chair", "mirror", "boom box", "television", "clothes", "truck", "air freshener", "socks", "blouse", "milk", "pencil", "bottle",
+    "lamp", "seat belt", "brocolli", "shampoo", "soy sauce packet", "thermostat", "cup", "rusty nail", "canvas", "plastic fork", "helmet", "chocolate",
+    "drill press", "keys", "tire swing", "mop", "flowers", "screw", "packing peanuts", "greeting card", "slipper", "bookmark", "chalk"];
+
     /**
      * Define the model's default state.
      *
@@ -22,10 +27,10 @@ class ItemFactory extends Factory
     public function definition()
     {
         return [
-            'item_name' => $this->faker->colorName,
-            'shortDescription' => $this->faker->sentence,
-            'longDescription' => $this->faker->text,
-            'image_url' => $this->faker->imageUrl(200, 300),
+            'item_name' => $this->itemList[rand(0,49)],
+            'short_description' => $this->faker->sentence,
+            'long_description' => $this->faker->text,
+            'image' => 'https://picsum.photos/600?random='.rand(1,100),
         ];
     }
 }

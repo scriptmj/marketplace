@@ -24,6 +24,9 @@
                                         Description
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Minimum bid
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Highest bid
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -39,24 +42,27 @@
                                     <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <img class="h-10 w-10 rounded-full" src="{{$item->image_url}}" alt="">
+                                        <div class="flex-shrink-0 h-20 w-20">
+                                            <img class="h-20 w-20" src="{{$item->image}}" alt="">
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">
-                                            {{$item->item_name}}
+                                            <a href="{{route('view.item', $item)}}" class="text-indigo-600 hover:text-indigo-900">{{ucfirst($item->item_name)}}</a>
                                             </div>
                                         </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{$item->shortDescription}}</div>
+                                        <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{$item->minimum_bid}}
+                                    </td>                                    
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{$item->highestBid()}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        0
+                                        {{$item->times_viewed}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <a href="{{route('view.item', $item)}}" class="text-indigo-600 hover:text-indigo-900">View more</a>

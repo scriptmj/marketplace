@@ -17,9 +17,11 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('item_name');
-            $table->longText('shortDescription');
-            $table->longText('longDescription');
-            $table->string('image_url');
+            $table->longText('short_description');
+            $table->longText('long_description');
+            $table->string('image');
+            $table->integer('times_viewed')->default(0);
+            $table->integer('minimum_bid')->default(0);
         });
     }
 
