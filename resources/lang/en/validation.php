@@ -137,6 +137,13 @@ return [
             'rule-name' => 'custom-message',
         ],
     ],
+    
+    'custom' => [
+        'bid' => [
+            'required' => 'Please enter a valid offer.',
+            'gt' => 'Please make sure your offer is higher than the minimum and any running bids.',
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

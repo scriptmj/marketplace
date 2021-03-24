@@ -19,13 +19,27 @@ Route::get('/', function () {
 
 Route::get('/', 'App\Http\Controllers\ItemController@home')->name('home');
 
-Route::get('/view/{item}', 'App\Http\Controllers\ItemController@viewItem')->name('view.item');
+Route::get('/view/{item}', 'App\Http\Controllers\ItemController@viewItem')->name('item.view');
 
 
-Route::get('/profile/{user}', 'App\Http\Controllers\UserController@viewProfile')->name('view.profile');
+Route::get('/profile/{user}', 'App\Http\Controllers\UserController@viewProfile')->name('profile.view');
+Route::get('/profile/{user}/itemsposted', 'App\Http\Controllers\UserController@viewProfileItemsPosted')->name('profile.itemsposted');
 
-Route::get('/item/create', 'App\Http\Controllers\ItemController@create')->name('item.create');
+
+Route::get('/item/create', 'App\Http\Controllers\ItemController@create')->middleware('auth')->name('item.create');
 Route::post('/item/create', 'App\Http\Controllers\ItemController@store')->middleware('auth')->name('item.store');
+
+Route::get('/item/{item}/edit', 'App\Http\Controllers\ItemController@edit')->middleware('auth')->name('item.edit');
+Route::put('/item/{item}/edit', 'App\Http\Controllers\ItemController@update')->middleware('auth')->name('item.update');
+
+Route::get('/item/{item}/sold', 'App\Http\Controllers\ItemController@sold')->middleware('auth')->name('item.markassold');
+Route::put('/item/{item}/sold', 'App\Http\Controllers\ItemController@updateSold')->middleware('auth')->name('item.updatesold');
+
+Route::get('/item/{item}/makebid', 'App\Http\Controllers\ItemController@makebid')->middleware('auth')->name('item.makebid');
+Route::post('item/{item}/makebid', 'App\Http\Controllers\ItemController@storebid')->middleware('auth')->name('item.storebid');
+
+Route::get('/user/itemsposted', 'App\Http\Controllers\UserController@viewItemsPosted')->middleware('auth')->name('user.itemsposted');
+
 
 
 Route::get('/dashboard', function () {

@@ -1,0 +1,61 @@
+Home: 
+X    Overview
+
+
+
+Navigation
+    Guest
+X        Home   
+X        Login
+
+    Logged in
+X        Home
+X        New Item
+X        Items posted
+        Your bids
+        Messages
+X        Logout
+
+Pages
+    Items
+X        Edit Item
+X        Make offer
+X        Item details
+        Mark as sold
+    Users
+        New message
+    Profile
+        See items listed
+        See items sold
+
+
+Validation
+    Logged in
+X        New Item
+X        Items posted
+X        Your bids
+        Messages
+        New message
+        View bids on item
+    Item owned
+x        Edit Item
+        Mark as sold
+        View bids on item
+    Item not owned 
+        Bid
+    Item not sold
+        Make bid
+        Send message
+
+
+Categories
+    Add to database
+    Link to items
+        Link in seeder
+        Allow on create
+        Allow on edit
+    Homepage
+        Sort by category
+
+Advertised items
+Payment
