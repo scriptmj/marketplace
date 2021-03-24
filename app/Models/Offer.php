@@ -11,6 +11,10 @@ class Offer extends Model
 
     protected $table = 'items_offers';
 
+    protected $fillable = [
+        'price', 'user_id', 'item_id'
+    ];
+
     public function user(){
         return $this->belongsTo('App\Models\User');
     }

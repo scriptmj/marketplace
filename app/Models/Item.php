@@ -20,14 +20,32 @@ class Item extends Model
         'minimum_bid',
     ];
 
-    public function highestBid(){
-        $allOffers = Offer::where('item_id', $this->id)->get();
-        if($allOffers->isNotEmpty()){
-            $sortedOffers = $allOffers->sortByDesc('price');
-            $priceFormatted = "€" . $sortedOffers->first()->price;
+    public function highestBidFormatted(){
+        $highestBid = $this->getHighestBid();
+        if($highestBid != null){
+            $priceFormatted = "€" . number_format($highestBid->price, 2);
             return $priceFormatted;
         } else {
             return "No offers";
+        }
+    }
+
+    public function getHighestBidNumeric(){
+        $highestBid = $this->getHighestBid();
+        if($highestBid != null){
+            return $highestBid->price;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getHighestBid(){
+        $allOffers = Offer::where('item_id', $this->id)->get();
+        if($allOffers->isNotEmpty()){
+            $sortedOffers = $allOffers->sortByDesc('price');
+            return $sortedOffers->first();
+        } else {
+            return null;
         }
     }
 
@@ -41,5 +59,17 @@ class Item extends Model
         } else {
             return asset('storage/'.$value);
         }
+    }
+
+    public function offers(){
+        return $this->hasMany('App\Models\Offer');
+    }
+
+    public function offersOrdered(){
+        return Offer::where('item_id', $this->id)->orderBy('price', 'DESC')->get();
+    }
+
+    public function isSold(){
+        return $this->sold ? "Yes" : "No";
     }
 }

@@ -41,7 +41,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function item(){
+    public function items(){
         return $this->hasMany('App\Models\Item');
+    }
+
+    public function offers(){
+        return $this->hasMany('App\Models\Offer');
+    }
+
+    public function isOwner(Item $item){
+        return $this->id == $item->user_id;
     }
 }

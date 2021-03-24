@@ -21,7 +21,9 @@ class CreateItemsTable extends Migration
             $table->longText('long_description');
             $table->string('image');
             $table->integer('times_viewed')->default(0);
-            $table->integer('minimum_bid')->default(0);
+            $table->float('minimum_bid')->default(0);
+            $table->boolean('sold')->default(false);
+            $table->timestamp('marked_as_sold')->nullable();
         });
     }
 
