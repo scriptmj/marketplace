@@ -36,15 +36,15 @@ X        Items posted
 X        Your bids
         Messages
         New message
-        View bids on item
+X        View bids on item
     Item owned
-x        Edit Item
-        Mark as sold
-        View bids on item
+X        Edit Item
+X        Mark as sold
+X        View bids on item
     Item not owned 
-        Bid
+X        Bid
     Item not sold
-        Make bid
+X        Make bid
         Send message
 
 

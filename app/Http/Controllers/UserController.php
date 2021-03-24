@@ -26,11 +26,19 @@ class UserController extends Controller
     }
 
     public function cancelBid(Offer $offer){
-        return view('item.cancelbid', ['offer' => $offer, 'item' => $offer->item]);
+        if(Auth::user()->isBidOwner($offer)){
+            return view('item.cancelbid', ['offer' => $offer, 'item' => $offer->item]);
+        } else {
+            return view('error', ['error' => 'You cannot cancel someone else\'s bid']);
+        }
     }
 
     public function destroyBid(Offer $offer){
-        $offer->delete();
-        return redirect(route('user.bids'));
+        if(Auth::user()->isBidOwner($offer)){
+            $offer->delete();
+            return redirect(route('user.bids'));
+        } else {
+            return view('error', ['error' => 'You cannot cancel someone else\'s bid']);
+        }
     }
 }

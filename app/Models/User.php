@@ -52,4 +52,8 @@ class User extends Authenticatable
     public function isOwner(Item $item){
         return $this->id == $item->user_id;
     }
+
+    public function isBidOwner(Offer $offer){
+        return $this->id == $offer->user_id;
+    }
 }

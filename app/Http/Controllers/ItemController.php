@@ -42,6 +42,8 @@ class ItemController extends Controller
     function makeBid(Item $item){
         if(Auth::user()->isOwner($item)){
             return view('error', ['error' => "You cannot bid on your own items."]);
+        } elseif($item->sold){
+            return view('error', ['error' => "Item is already sold."]); 
         } else {
             return view('item.makebid', ['item' => $item]);
         }
@@ -50,6 +52,8 @@ class ItemController extends Controller
     function storeBid(Item $item){
         if(Auth::user()->isOwner($item)){
             return view('error', ['error' => "You cannot bid on your own items."]);
+        } elseif($item->sold){
+            return view('error', ['error' => "Item is already sold."]); 
         } else {
             $highestBid = $item->getHighestBidNumeric();
             $validMinimum = $highestBid != 0 ? $highestBid + 0.1 : $item->minimum_bid + 0.1;
