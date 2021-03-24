@@ -11,13 +11,22 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function viewProfile(User $user){
-        return view('user.profile', ['user' => $user]);
+        return view('profile.profile', ['user' => $user]);
     }
 
     public function viewItemsPosted(){
         $items = Item::where('user_id', Auth::user()->id)->get();
         //dd($items);
         return view('user.itemsposted', ['items' => $items]);
+    }
+
+    public function viewProfileItemsPosted(User $user){
+        if(Auth::user() == $user){
+            return redirect(route('user.itemsposted'));
+        } else {
+            $items = Item::where('user_id', $user->id)->get();
+            return view('profile.itemsposted', ['items' => $items]);
+        }
     }
 
     public function viewBids(){

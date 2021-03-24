@@ -21,11 +21,11 @@ Pages
 X        Edit Item
 X        Make offer
 X        Item details
-        Mark as sold
+X        Mark as sold
     Users
         New message
     Profile
-        See items listed
+X        See items listed
         See items sold
 
 
