@@ -11,6 +11,13 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <!-- Content -->
                     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    @if($item->sold)
+                        <div class="px-4 py-5 sm:px-6 bg-green-100">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                <strong>Sold</strong> for €{{number_format($item->getHighestBid()->price, 2)}} to {{$item->getHighestBid()->user->name}} on {{$item->marked_as_sold}}.
+                            </h3>
+                        </div>
+                    @endif
                         <div class="px-4 py-5 sm:px-6">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">
                             {{ucfirst($item->item_name)}}

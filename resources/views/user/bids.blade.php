@@ -37,13 +37,18 @@
                                 
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($offers as $offer)
+                                    @if($offer->item->sold)
+                                        @continue
+                                    @endif
                                     @if($offer->isHighestOffer())
                                     <tr class="bg-green-50">
                                     @else
                                     <tr class="bg-grey-50">
                                     @endif
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ucfirst($offer->item->item_name)}}
+                                            <a href="{{route('item.view', $offer->item)}}">
+                                                {{ucfirst($offer->item->item_name)}}
+                                            </a>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {{$offer->price}}

@@ -59,3 +59,6 @@ Categories
 
 Advertised items
 Payment
+
+Message to user when item is marked as sold
+Mark as sold will notify user that their bid was accepted. Please delete item if it is no longer available.
