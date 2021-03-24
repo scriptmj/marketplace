@@ -47,7 +47,7 @@
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">
-                                            <a href="{{route('view.item', $item)}}" class="text-indigo-600 hover:text-indigo-900">{{ucfirst($item->item_name)}}</a>
+                                            <a href="{{route('item.view', $item)}}" class="text-indigo-600 hover:text-indigo-900">{{ucfirst($item->item_name)}}</a>
                                             </div>
                                         </div>
                                         </div>
@@ -56,16 +56,16 @@
                                         <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{$item->minimum_bid}}
+                                        €{{number_format($item->minimum_bid, 2)}}
                                     </td>                                    
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{$item->highestBid()}}
+                                        {{$item->highestBidFormatted()}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{$item->times_viewed}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="{{route('view.item', $item)}}" class="text-indigo-600 hover:text-indigo-900">View more</a>
+                                        <a href="{{route('item.view', $item)}}" class="text-indigo-600 hover:text-indigo-900">View more</a>
                                     </td>
                                     </tr>
                                         @empty

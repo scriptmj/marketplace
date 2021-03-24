@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('item.create')" :active="request()->routeIs('item.create')">
                         {{ __('New item') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('user.itemsposted')" :active="request()->routeIs('user.itemsposted')">
+                        {{ __('Items posted') }}
+                    </x-nav-link>
                 </div>
             </div>
 

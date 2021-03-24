@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Advertise new item') }}
+            {{ __('Edit item') }}
         </h2>
     </x-slot>
 
@@ -15,15 +15,16 @@
   <div class="md:grid md:grid-cols-4 md:gap-6">
     <div class="md:col-span-1">
       <div class="px-4 sm:px-0">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">New item</h3>
+        <h3 class="text-lg font-medium leading-6 text-gray-900">Edit item</h3>
         <p class="mt-1 text-sm text-gray-600">
           
         </p>
       </div>
     </div>
     <div class="mt-5 md:mt-0 md:col-span-3">
-      <form action="{{route('item.store')}}" method="POST" enctype="multipart/form-data">
+      <form action="{{route('item.update', $item)}}" method="POST" enctype="multipart/form-data">
       @csrf
+      @method('put')
         <div class="shadow overflow-hidden sm:rounded-md">
           <div class="px-4 py-5 bg-white sm:p-6">
             <div class="grid grid-cols-6 gap-6">
@@ -36,7 +37,7 @@
                     name="item_name" 
                     id="item_name" 
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    value= "{{old('item_name')}}">
+                    value= "{{old('item_name', $item->item_name)}}">
                 @error('item_name')
             <p class="help-block">{{$errors->first('item_name')}}</p>
         @enderror
@@ -52,7 +53,7 @@
                     id="short_description" 
                     name="short_description" 
                     rows="2" 
-                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md">{{old('short_description')}}</textarea>
+                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md">{{old('short_description', $item->short_description)}}</textarea>
               </div>
               <p class="mt-2 text-sm text-gray-500">
                 This description will be shown on the homepage.
@@ -72,7 +73,7 @@
                 id="long_description" 
                 name="long_description" 
                 rows="5" 
-                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md">{{old('long_description')}}</textarea>
+                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md">{{old('long_description', $item->long_description)}}</textarea>
               </div>
               <p class="mt-2 text-sm text-gray-500">
                 Describe the item with all necessary details.
@@ -93,7 +94,7 @@
                 id="minimum_bid" 
                 name="minimum_bid" 
                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
-                value="{{old('minimum_bid')}}">
+                value="{{old('minimum_bid', $item->minimum_bid)}}">
               </div>
               <p class="mt-2 text-sm text-gray-500">
                 Leave blank is no minimum is required.
@@ -118,7 +119,7 @@
         @enderror
     </div>
     <!-- Image preview -->
-    <img id="preview-image-before-upload" style="width:400px;height:200px;margin:5px;"></img>
+    <img id="preview-image-before-upload" style="width:400px;height:200px;margin:5px;" src="{{$item->image}}"></img>
 
             </div>
           </div>
