@@ -112,6 +112,7 @@ class ItemController extends Controller
     }
 
     function updateSold(Item $item){
+        //TODO check if item has highest bid. IF not, delete instead.
         if(Auth::user()->isOwner($item)){
             if($item->sold){
                 return view('error', ['error' => "This item is already marked as sold."]); 
@@ -119,6 +120,8 @@ class ItemController extends Controller
             $item->sold = true;
             $item->marked_as_sold = Carbon::now();
             $item->update();
+            $item->user->items_sold++;
+            $item->user->update();
             return redirect(route('item.view', ['item' =>$item]));
         } else {
             return view('error', ['error' => "You do not own this item."]); 

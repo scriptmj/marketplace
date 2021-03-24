@@ -20,6 +20,17 @@ class UserController extends Controller
         return view('user.itemsposted', ['items' => $items]);
     }
 
+    public function viewProfileItemsSold(User $user){
+        if(Auth::user() == $user){
+            return redirect(route('user.itemsposted'));
+        } else {
+            $items = Item::where('user_id', $user->id)
+                ->where('sold', true)
+                ->get();
+            return view('profile.solditems', ['items' => $items]);
+        }
+    }
+
     public function viewProfileItemsPosted(User $user){
         if(Auth::user() == $user){
             return redirect(route('user.itemsposted'));

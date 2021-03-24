@@ -24,6 +24,7 @@ Route::get('/view/{item}', 'App\Http\Controllers\ItemController@viewItem')->name
 
 Route::get('/profile/{user}', 'App\Http\Controllers\UserController@viewProfile')->name('profile.view');
 Route::get('/profile/{user}/itemsposted', 'App\Http\Controllers\UserController@viewProfileItemsPosted')->name('profile.itemsposted');
+Route::get('/profile/{user}/itemssold', 'App\Http\Controllers\UserController@viewProfileItemsSold')->name('profile.itemssold');
 
 
 Route::get('/item/create', 'App\Http\Controllers\ItemController@create')->middleware('auth')->name('item.create');
