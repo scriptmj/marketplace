@@ -39,6 +39,11 @@ Route::get('/item/{item}/makebid', 'App\Http\Controllers\ItemController@makebid'
 Route::post('item/{item}/makebid', 'App\Http\Controllers\ItemController@storebid')->middleware('auth')->name('item.storebid');
 
 Route::get('/user/itemsposted', 'App\Http\Controllers\UserController@viewItemsPosted')->middleware('auth')->name('user.itemsposted');
+Route::get('/user/bids', 'App\Http\Controllers\UserController@viewBids')->middleware('auth')->name('user.bids');
+
+Route::get('/user/bids/{offer}', 'App\Http\Controllers\UserController@cancelBid')->middleware('auth')->name('user.cancelbid');
+Route::delete('/user/bids/{offer}', 'App\Http\Controllers\UserController@destroyBid')->middleware('auth')->name('user.destroybid');
+
 
 
 

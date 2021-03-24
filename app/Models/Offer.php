@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Offer;
 
 class Offer extends Model
 {
@@ -21,5 +22,11 @@ class Offer extends Model
 
     public function item(){
         return $this->belongsTo('App\Models\Item');
+    }
+
+    public function isHighestOffer(){
+        $highestOffer = Offer::where('item_id', $this->item_id)->max('price');
+        
+        return $highestOffer == $this->price;
     }
 }

@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('user.itemsposted')" :active="request()->routeIs('user.itemsposted')">
                         {{ __('Items posted') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('user.bids')" :active="request()->routeIs('user.bids')">
+                        {{ __('Your bids') }}
+                    </x-nav-link>
                 </div>
             </div>
 
