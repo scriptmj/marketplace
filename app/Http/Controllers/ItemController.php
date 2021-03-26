@@ -61,15 +61,14 @@ class ItemController extends Controller
             $highestBid = $item->getHighestBidNumeric();
             $validMinimum = $highestBid != 0 ? $highestBid + 0.1 : $item->minimum_bid + 0.1;
             $this->validateBid($validMinimum);
-            //TODO: Minimum not validated
-            //dd(request());
             $offer = new Offer();
             $offer->price = request('bid');
             $offer->user_id = Auth::user()->id;
             $offer->item_id = $item->id;
             $offer->save();
+            $message = Auth::user()->name." has offered €".number_format($offer->price, 2)." for your ".$item->item_name.".";
+            $this->notifyUser($item, Auth::user(), $message);
             return redirect(route('item.view', ['item' => $item]));
-            //dd("Correct bid");
         }
     }
 
