@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Offer;
+use App\Models\ChatMessage;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -72,5 +73,27 @@ class UserController extends Controller
             $notification->read = true;
             $notification->update();
         }
+    }
+
+    public function composeMessage(Item $item){
+        return view('user.composemessage', ['user' => $item->user, 'item' => $item]);
+    }
+
+    public function sendMessage(Item $item){
+        $toUser = $item->user;
+        $fromUser = Auth::user();
+        $chat = new ChatMessage();
+        $chat->to = $toUser->id;
+        $chat->from = $fromUser->id;
+        $chat->message = request('message');
+        $chat->item_ref = $item->id;
+        $chat->save();
+        return redirect(route('item.view', $item));
+
+        
+    }
+    
+    public function getMessages(){
+        return view('user.messages', ['messages' => Auth::user()->chatMessages]);
     }
 }

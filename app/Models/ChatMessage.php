@@ -9,5 +9,17 @@ class ChatMessage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message'];
+    protected $fillable = ['to', 'from', 'item_ref', 'message'];
+
+    public function item(){
+        return $this->belongsTo('App\Models\Item', 'item_ref', 'id');
+    }
+    
+    public function fromUser(){
+        return $this->belongsTo('App\Models\User', 'from', 'id');
+    }
+
+    public function toUser(){
+        return $this->belongsTo('App\Models\User', 'id', 'to');
+    }
 }

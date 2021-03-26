@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('user.notifications')" :active="request()->routeIs('user.notifications')">
                         {{ __('Notifications') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('user.getmessages')" :active="request()->routeIs('user.getmessages')">
+                        {{ __('Messages') }}
+                    </x-nav-link>
                 </div>
             </div>
 

@@ -78,7 +78,7 @@
                                 
                                 @if(Auth::user() && !Auth::user()->isOwner($item))
                                 <a class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                href="">
+                                href="{{route('user.composemessage', $item)}}">
                                     Message seller
                                 </a>
                                 <a class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

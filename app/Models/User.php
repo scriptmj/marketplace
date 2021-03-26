@@ -51,7 +51,11 @@ class User extends Authenticatable
     }
 
     public function chatMessages(){
-        return $this->hasMany('App\Models\ChatMessage');
+        return $this->hasMany('App\Models\ChatMessage', 'to');
+    }
+
+    public function chatMessagesSent(){
+        return $this->hasMany('App\Models\ChatMessage', 'from');
     }
 
     public function notifications(){
