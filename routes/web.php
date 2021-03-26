@@ -45,6 +45,8 @@ Route::get('/user/bids', 'App\Http\Controllers\UserController@viewBids')->middle
 Route::get('/user/bids/{offer}', 'App\Http\Controllers\UserController@cancelBid')->middleware('auth')->name('user.cancelbid');
 Route::delete('/user/bids/{offer}', 'App\Http\Controllers\UserController@destroyBid')->middleware('auth')->name('user.destroybid');
 
+Route::get('/user/notifications', 'App\Http\Controllers\UserController@notifications')->middleware('auth')->name('user.notifications');
+
 
 
 

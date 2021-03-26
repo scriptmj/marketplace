@@ -67,7 +67,7 @@ class ItemController extends Controller
             $offer->item_id = $item->id;
             $offer->save();
             $message = Auth::user()->name." has offered €".number_format($offer->price, 2)." for your ".$item->item_name.".";
-            $this->notifyUser($item, Auth::user(), $message);
+            $this->notifyUser($item, $item->user, $message);
             return redirect(route('item.view', ['item' => $item]));
         }
     }

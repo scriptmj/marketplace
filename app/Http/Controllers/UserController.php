@@ -61,4 +61,16 @@ class UserController extends Controller
             return view('error', ['error' => 'You cannot cancel someone else\'s bid']);
         }
     }
+
+    public function notifications(){
+        $this->markNotificationsAsRead(Auth::user()->notifications);
+        return view('user.notifications', ['notifications' => Auth::user()->notifications]);
+    }
+
+    private function markNotificationsAsRead($notifications){
+        foreach($notifications as $notification){
+            $notification->read = true;
+            $notification->update();
+        }
+    }
 }

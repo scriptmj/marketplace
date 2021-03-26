@@ -50,6 +50,14 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Offer');
     }
 
+    public function chatMessages(){
+        return $this->hasMany('App\Models\ChatMessage');
+    }
+
+    public function notifications(){
+        return $this->hasMany('App\Models\Notification');
+    }
+
     public function isOwner(Item $item){
         return $this->id == $item->user_id;
     }
