@@ -54,10 +54,14 @@
                                         </td>                                    
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         <!-- TODO -->
+                                        @if($item->getHighestBid())
                                             {{$item->getHighestBid()->user->name}}
+                                        @else
+
+                                        @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{$item->times_viewed}}
+                                            {{$item->marked_as_sold}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{route('item.view', $item)}}" class="text-indigo-600 hover:text-indigo-900">View more</a><br />

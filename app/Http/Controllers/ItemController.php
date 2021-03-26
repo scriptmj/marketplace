@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\User;
 use App\Models\Offer;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class ItemController extends Controller
 {
@@ -112,20 +115,50 @@ class ItemController extends Controller
     }
 
     function updateSold(Item $item){
-        //TODO check if item has highest bid. IF not, delete instead.
         if(Auth::user()->isOwner($item)){
+            if($item->getHighestBid() == null){
+                return view('error', ['error' => "This item has no bids. If you've sold this item outside of this site, please delete the item instead."]);
+            }
             if($item->sold){
                 return view('error', ['error' => "This item is already marked as sold."]); 
             }
+            $this->handleNotifications($item);
             $item->sold = true;
             $item->marked_as_sold = Carbon::now();
             $item->update();
-            $item->user->items_sold++;
-            $item->user->update();
             return redirect(route('item.view', ['item' =>$item]));
         } else {
             return view('error', ['error' => "You do not own this item."]); 
         }
+    }
+
+    function handleNotifications(Item $item){
+        $buyer = $item->getHighestBid()->user;
+        $allOffers = $item->offers;
+        $allBuyers = new Collection();
+        foreach($allOffers as $offer){
+            if($offer->user == $buyer){
+                continue;
+            } elseif($allBuyers->contains($offer->user)){
+                continue;
+            } else {
+                $allBuyers->push($offer->user);
+            }
+        }
+        $messageToBuyer = "You were the highest bidder on the ".$item->item_name." and the seller has accepted your offer. You can contact the seller for further details on shipping and payment, if they haven't already contacted you.";
+        $messageToOtherBidders = "The item ".$item->item_name." that you bid on has been sold to the highest bidder. Unfortunately your bid was not high enough, better luck next time.";
+        $this->notifyUser($item, $item->getHighestBid()->user, $messageToBuyer);
+        foreach($allBuyers as $user){
+            $this->notifyUser($item, $user, $messageToOtherBidders);
+        }
+    }
+
+    function notifyUser(Item $item, User $user, $message){
+        $notification = new Notification();
+        $notification->user_id = $user->id;
+        $notification->item_id = $item->id;
+        $notification->message = $message;
+        $notification->save();
     }
 
     //Validators

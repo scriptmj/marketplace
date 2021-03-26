@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Item;
 
 class User extends Authenticatable
 {
@@ -55,5 +56,9 @@ class User extends Authenticatable
 
     public function isBidOwner(Offer $offer){
         return $this->id == $offer->user_id;
+    }
+
+    public function itemsSold(){
+        return Item::where('user_id', $this->id)->where('sold', true)->count();
     }
 }

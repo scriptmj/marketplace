@@ -20,6 +20,7 @@ class CreateChatMessagesTable extends Migration
             $table->unsignedBigInteger('from');
             $table->unsignedBigInteger('to');
             $table->unsignedBigInteger('item_ref')->nullable();
+            $table->boolean('read')->default(false);
         });
 
         Schema::table('chat_messages', function (Blueprint $table) {
