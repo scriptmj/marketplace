@@ -43,5 +43,7 @@
             </div>
             </footer>
         </div>
+        
+<script src="../../js/category.js"></script>
     </body>
 </html>

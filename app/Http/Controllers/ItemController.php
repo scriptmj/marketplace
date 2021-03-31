@@ -7,16 +7,25 @@ use App\Models\Item;
 use App\Models\User;
 use App\Models\Offer;
 use App\Models\Notification;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\View;
 
 class ItemController extends Controller
 {
     //Overview
     function home(){
-        $items = Item::where('sold', false)->orderBy('created_at', 'DESC')->get();
-        return view('item.overview', ['items' => $items]);
+        $items = Item::where('sold', false)->orderBy('created_at', 'DESC')->paginate(10);
+        $categories = Category::get();
+        $view = View::make('item.overview', ['items' => $items, 'categories' => $categories]);
+        $sections = $view->renderSections();
+        if(request()->ajax()){
+            return $sections['content'];
+        } else {
+            return $sections['page'];
+        }
     }
 
     //View each item
@@ -28,7 +37,8 @@ class ItemController extends Controller
 
     //Create new item
     function create(){
-        return view('item.create');
+        $categories = Category::get();
+        return view('item.create', ['categories' => $categories]);
     }
 
     function store(){
@@ -38,6 +48,7 @@ class ItemController extends Controller
         $item = new Item(request(['item_name', 'short_description', 'long_description', 'user_id', 'minimum_bid']));
         $item['image'] = request('image')->store('imagefiles');
         $item->save();
+        $item->categories()->attach(request('categories'));
         return redirect(route('item.view', ['item' => $item]));
     }
 
@@ -84,7 +95,8 @@ class ItemController extends Controller
     // Edit and update an item.
     function edit(Item $item){
         if(Auth::user()->isOwner($item)){
-            return view('item.edit', ['item' => $item]);
+            $categories = Category::get();
+            return view('item.edit', ['item' => $item, 'categories' => $categories]);
         } else {
             return view('error', ['error' => "You do not own this item."]);
         }
@@ -94,6 +106,7 @@ class ItemController extends Controller
         if(Auth::user()->isOwner($item)){
             request()->merge(['user_id' => $item->user_id]);
             $item->update($this->validateItem());
+            $item->categories()->sync(request('categories'));
             if(request('image') !== null){
                 $this->validateImageFile();
                 $item['image'] = request('image')->store('imagefiles');
@@ -167,6 +180,7 @@ class ItemController extends Controller
             'short_description' => 'required|string|min:2',
             'long_description' => 'required|string|min:2',
             'minimum_bid' => 'numeric',
+            'categories' => 'exists:categories,id',
         ]);
     }
 

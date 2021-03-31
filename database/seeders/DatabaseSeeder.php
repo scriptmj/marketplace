@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             ItemSeeder::class,
-            CategoriesItemsSeeder::class,
+            CategoryItemSeeder::class,
             ItemOfferSeeder::class,
             ChatMessagesSeeder::class,
         ]);

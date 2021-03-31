@@ -13,7 +13,7 @@ class Category extends Model
 
     public $timestamps = false;
 
-    public function item(){
+    public function items(){
         return $this->belongsToMany('App\Models\Item');
     }
 }

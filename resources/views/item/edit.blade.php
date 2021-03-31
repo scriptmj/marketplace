@@ -121,6 +121,45 @@
     <!-- Image preview -->
     <img id="preview-image-before-upload" style="width:400px;height:200px;margin:5px;" src="{{$item->image}}"></img>
 
+          <!-- Categories selection -->
+    <div class="col-span-6 sm:col-span-6">
+      <label for="categoriesDiv" class="block text-sm font-medium text-gray-700">
+        Categories
+      </label>
+      <div class="block text-sm font-medium text-gray-700 m-2" id="categoriesDiv">
+      @forelse($item->categories as $category)
+            <span class="category-chosen inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-indigo-200" 
+            id="id {{$category->id}}" onclick="resetChosenCategory({{$category->id}}, '{{$category->name}}')">{{$category->name}}</span>
+            @empty
+        @endforelse
+      </div>
+
+    <!-- Categories selection for form HIDDEN -->    
+        <select style="display:none" name="categories[]" id="categoriesInput" multiple>
+        @forelse($item->categories as $category)
+          <option value="{{$category->id}}" id="cat-option {{$category->id}}" selected></option>
+        @empty
+        @endforelse
+        </select>
+
+    <!-- Category choices -->
+        <div id="category-choices">
+            @foreach($categories as $category)
+              <button id="cat {{$category->id}}" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onClick="addCategory('{{$category->id}}', '{{$category->name}}')">{{$category->name}}</button>
+            @endforeach
+            @error('categories')
+              <p class="help-block">{{$errors->first('categories')}}</p>
+            @enderror
+        </div>
+  </div>
+    <!-- Adding new custom category -->
+        <div>
+            <div class="col-span-6 sm:col-span-6">
+                <label for="add-category" class="inline-flex text-sm font-medium text-gray-700">New category: </label>
+                <input type="text" id="add-category-input" name="add-category" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md">
+                <button type="button" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" onclick="addNewCategory()">+</button>
+            </div>
+        </div>
             </div>
           </div>
 

@@ -72,4 +72,8 @@ class Item extends Model
     public function isSold(){
         return $this->sold ? "Yes" : "No";
     }
+
+    public function categories(){
+        return $this->belongsToMany('App\Models\Category');
+    }
 }

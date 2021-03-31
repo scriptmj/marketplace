@@ -52,6 +52,8 @@ Route::post('/user/{user}/sendmessage/{item?}', 'App\Http\Controllers\UserContro
 Route::get('/user/messages', 'App\Http\Controllers\UserController@getMessages')->middleware('auth')->name('user.getmessages');
 Route::get('/user/messages/{user}', 'App\Http\Controllers\UserController@viewMessage')->middleware('auth')->name('message.view');
 
+Route::post('/category', 'App\Http\Controllers\CategoryController@store')->middleware('auth')->name('category.store');
+Route::get('/category/{category}/items', 'App\Http\Controllers\CategoryController@getItemsByCategory')->middleware('auth')->name('item.bycategory');
 
 
 
