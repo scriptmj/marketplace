@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
             'name' => 'Test',
             'email' => 'test@test.nl',
             'password' => Hash::make('password'),
+            'postcode' => '9351',
         ]);
 
     }
