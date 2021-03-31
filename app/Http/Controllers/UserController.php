@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\Offer;
 use App\Models\ChatMessage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserController extends Controller
 {
@@ -64,36 +65,66 @@ class UserController extends Controller
     }
 
     public function notifications(){
-        $this->markNotificationsAsRead(Auth::user()->notifications);
+        $this->markAsRead(Auth::user()->notifications, true);
         return view('user.notifications', ['notifications' => Auth::user()->notifications]);
     }
 
-    private function markNotificationsAsRead($notifications){
-        foreach($notifications as $notification){
-            $notification->read = true;
-            $notification->update();
-        }
+    public function composeMessage(User $user, Item $item){
+        return view('user.composemessage', ['user' => $user, 'item' => $item]);
     }
 
-    public function composeMessage(Item $item){
-        return view('user.composemessage', ['user' => $item->user, 'item' => $item]);
-    }
-
-    public function sendMessage(Item $item){
-        $toUser = $item->user;
+    public function sendMessage(User $user, Item $item){
         $fromUser = Auth::user();
         $chat = new ChatMessage();
-        $chat->to = $toUser->id;
+        $chat->to = $user->id;
         $chat->from = $fromUser->id;
         $chat->message = request('message');
         $chat->item_ref = $item->id;
         $chat->save();
-        return redirect(route('item.view', $item));
-
-        
+        return redirect(route('profile.view', $user));
     }
     
     public function getMessages(){
-        return view('user.messages', ['messages' => Auth::user()->chatMessages]);
+        $userInteractions = Auth::user()->getAllUserInteractions();
+        foreach($userInteractions as $user){
+            $user->lastMessage = $user->getLastMessageByUser(Auth::user()->id, $user->id);
+        }
+        //dd($userInteractions);
+        return view('user.messages', ['userInteractions' => $userInteractions]);
+    }
+
+    public function viewMessage(User $user){
+        return view('user.viewmessagehistory', ['messages' => $this->getMessageHistoryByUser(Auth::user(), $user)]);
+    }
+
+    private function getMessageHistoryByUser(User $LoggedUser, User $otherUser){
+        $messages = new Collection();
+        $fromLoggedUser = ChatMessage::where('from', $LoggedUser->id)->where('to', $otherUser->id)->orderBy('created_at', 'DESC')->get();
+        $fromOtherUser = ChatMessage::where('from', $otherUser->id)->where('to', $LoggedUser->id)->orderBy('created_at', 'DESC')->get();
+        foreach($fromLoggedUser as $message){
+            $messages->push($message);
+        }
+        foreach($fromOtherUser as $message){
+            if(!$message->read){
+                $this->markAsRead($message, false);
+            }
+            $messages->push($message);
+        }
+        $sortedMessages = $messages->sortByDesc('created_at');
+        return $sortedMessages;
+    }
+
+    private function markAsRead($item, $isCollection){
+        if($isCollection){
+            foreach($item as $i){
+                if(!$i->read){
+                    $i->read = true;
+                    $i->update();
+                }
+            }
+        } else {
+            $item->read = true;
+            $item->update();
+        }
     }
 }

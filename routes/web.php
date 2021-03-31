@@ -47,9 +47,11 @@ Route::delete('/user/bids/{offer}', 'App\Http\Controllers\UserController@destroy
 
 Route::get('/user/notifications', 'App\Http\Controllers\UserController@notifications')->middleware('auth')->name('user.notifications');
 
-Route::get('/user/item/{item}/sendmessage', 'App\Http\Controllers\UserController@composeMessage')->middleware('auth')->name('user.composemessage');
-Route::post('/user/item/{item}/sendmessage', 'App\Http\Controllers\UserController@sendMessage')->middleware('auth')->name('user.sendmessage');
+Route::get('/user/{user}/sendmessage/{item?}', 'App\Http\Controllers\UserController@composeMessage')->middleware('auth')->name('user.composemessage');
+Route::post('/user/{user}/sendmessage/{item?}', 'App\Http\Controllers\UserController@sendMessage')->middleware('auth')->name('user.sendmessage');
 Route::get('/user/messages', 'App\Http\Controllers\UserController@getMessages')->middleware('auth')->name('user.getmessages');
+Route::get('/user/messages/{user}', 'App\Http\Controllers\UserController@viewMessage')->middleware('auth')->name('message.view');
+
 
 
 

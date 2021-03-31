@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="mt-5 md:mt-0 md:col-span-3">
-      <form action="{{route('user.sendmessage', $item)}}" method="POST">
+      <form action="{{route('user.sendmessage', ['user'=> $user, 'item' => $item])}}" method="POST">
       @csrf
         <div class="shadow overflow-hidden sm:rounded-md">
           <div class="px-4 py-5 bg-white sm:p-6">
@@ -44,7 +44,9 @@
                 Regarding item
               </label>
               <div class="mt-1">
+              @if($item)
                 {{ucfirst($item->item_name)}}
+                @endif
               </div>
 
                 </div>

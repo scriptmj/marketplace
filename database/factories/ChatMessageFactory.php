@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ChatMessage;
 use App\Models\User;
+use App\Models\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ChatMessageFactory extends Factory
@@ -26,6 +27,7 @@ class ChatMessageFactory extends Factory
             'message' => $this->faker->sentence,
             'from' => rand(1,User::count()),
             'to' => rand(1,User::count()),
+            'item_ref' => rand(1, Item::count()),
         ];
     }
 }

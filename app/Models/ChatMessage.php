@@ -20,6 +20,6 @@ class ChatMessage extends Model
     }
 
     public function toUser(){
-        return $this->belongsTo('App\Models\User', 'id', 'to');
+        return $this->belongsTo('App\Models\User', 'to', 'id');
     }
 }

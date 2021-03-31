@@ -26,9 +26,15 @@
                     </x-nav-link>
                     <x-nav-link :href="route('user.notifications')" :active="request()->routeIs('user.notifications')">
                         {{ __('Notifications') }}
+                        @if(Auth::user()->hasUnreadNotification())
+                        <div class="rounded-full h-2 w-2 bg-red-700 border-red-700 m-1"></div>
+                        @endif
                     </x-nav-link>
                     <x-nav-link :href="route('user.getmessages')" :active="request()->routeIs('user.getmessages')">
                         {{ __('Messages') }}
+                        @if(Auth::user()->hasUnreadMessages())
+                        <div class="rounded-full h-2 w-2 bg-red-700 border-red-700 m-1"></div>
+                        @endif
                     </x-nav-link>
                 </div>
             </div>
