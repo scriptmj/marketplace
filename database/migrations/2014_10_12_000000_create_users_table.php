@@ -21,8 +21,12 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->integer('postcode');
+            $table->unsignedInteger('postcode_id')->nullable();
         });
+
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->foreign('postcode')->references('id')->on('4pp');
+        // });
     }
 
     /**

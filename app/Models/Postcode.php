@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class Postcode extends Model
 {
@@ -31,6 +34,33 @@ class Postcode extends Model
         $distance = 2*$earth_radius * $c;
         $distance = round($distance, 4);
 
-        $this->measure = $distance;
+        return $this->measure = $distance;
     }
+
+    public function getPostcodesByDistance($distance){
+        $query = "SELECT id FROM (
+            SELECT *, 
+                (
+                    (
+                        (
+                            acos(
+                                sin(( $this->latitude * pi() / 180))
+                                *
+                                sin(( `latitude` * pi() / 180)) + cos(( $this->latitude * pi() /180 ))
+                                *
+                                cos(( `latitude` * pi() / 180)) * cos((( $this->longitude - `longitude`) * pi()/180)))
+                        ) * 180/pi()
+                    ) * 60 * 1.1515 * 1.609344
+                )
+            as distance FROM `4pp`
+        ) 4pp
+        WHERE distance <= $distance;";
+        $postcodesWithinRange = DB::select($query);
+        $postcodeIDs = new Collection();
+        foreach($postcodesWithinRange as $postcode){
+            $postcodeIDs->push($postcode->id);
+        }
+        return $postcodeIDs;
+    }
+
 }

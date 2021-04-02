@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'postcode_id',
     ];
 
     /**
@@ -119,5 +120,9 @@ class User extends Authenticatable
 
     public function itemsSold(){
         return Item::where('user_id', $this->id)->where('sold', true)->count();
+    }
+
+    public function postcode(){
+        return $this->belongsTo('App\Models\Postcode');
     }
 }

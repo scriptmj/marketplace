@@ -45,6 +45,14 @@
                                 name="password_confirmation" required />
             </div>
 
+            <div class="mt-4">
+                <x-label for="postcode" :value="__('Postcode')" />
+
+                <x-input id="postcode" class="block mt-1 w-full"
+                                type="text"
+                                name="postcode" required />
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
                     {{ __('Already registered?') }}

@@ -13,6 +13,9 @@
                                         Description
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Postcode
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Minimum bid
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -41,9 +44,16 @@
                                         </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-normal">
                                         <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
+                                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
+                                        {{$item->user->postcode->postcode}}
+                                        @if(Auth::user())
+                                         - 
+                                        {{number_format($item->user->postcode->getDistance(Auth::user()->postcode, $item->user->postcode), 1)}}km
+                                        @endif
+                                    </td> 
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         €{{number_format($item->minimum_bid, 2)}}
                                     </td>                                    

@@ -14,7 +14,7 @@ class CategoryController extends Controller
 
     public function getItemsByCategory(Category $category){
         if(request()->ajax()){
-            $view = View::make('item.itemsbycategory', ['category' => $category, 'items' => $category->items()->paginate(10)]);
+            $view = View::make('item.itemsbycategory', ['category' => $category, 'items' => $category->items()->where('sold', false)->paginate(10)]);
             $sections = $view->renderSections();
             return $sections['content'];
         }

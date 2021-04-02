@@ -11,18 +11,75 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <!-- Content -->
+
                     <div id="category-choices" 
-                    class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    class="align-middle inline-block min-w-full sm:px-6 lg:px-8">
                         <div class="text-sm text-gray-900">
-                        <p>Filter by category</p>
+                        <button 
+                        onclick="toggleShowDiv('cat-buttons')"
+                        class="inline-flex items-center px-2 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white">Filter by category</button>
+                        <div id="cat-buttons" class="hidden">
                         @foreach($categories as $category)
                             <button id="cat {{$category->id}}" type="button" 
                             class="category btn btn-light inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" 
                             onClick="filterPostsByCategory('{{$category->id}}')">{{$category->name}}</button>
                         @endforeach
                         </div>
+                        </div>
+                    </div>
+                    <div id="distance-search-options" 
+                    class="inline-block align-middle min-w-full sm:px-6 lg:px-8">
+                        <div class="text-sm text-gray-900">
+                        <button 
+                        onclick="toggleShowDiv('distance-search')"
+                        class="inline-flex items-center px-2 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white">
+                            Search by distance
+                        </button>
+                        <div id="distance-search" class="hidden">
+                            <form action="{{route('item.searchbydistance')}}" method="POST">
+                            @csrf
+                                <input 
+                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                type="number" 
+                                name="distanceKm" 
+                                id="distanceKm">
+                                <button 
+                                type="submit" 
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Search
+                                </button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    <div id="keyword-search-options" 
+                    class="inline-block align-middle min-w-full sm:px-6 lg:px-8">
+                        <div class="text-sm text-gray-900">
+                        <button 
+                        onclick="toggleShowDiv('keyword-search')"
+                        class="inline-flex items-center px-2 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white">
+                            Search by keyword
+                        </button>
+                        <div id="keyword-search" class="hidden">
+                            <form action="{{route('item.searchbykeyword')}}" method="POST">
+                            @csrf
+                                <input 
+                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                type="text" 
+                                name="keyword" 
+                                id="keyword">
+                                <button 
+                                type="submit" 
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Search
+                                </button>
+                            </form>
+                        </div>
+                        </div>
                         <hr />
                     </div>
+
+
                     <div class="flex flex-col" id="contentDiv">
                         <div class="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -68,11 +125,17 @@
                                         </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-normal">
                                         <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{$item->user->postcode}}
+                                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
+                                        {{$item->user->postcode->postcode}}
+                                        -
+                                        {{$item->user->postcode->woonplaats}}
+                                        @if(Auth::user())
+                                         - 
+                                        {{number_format($item->user->postcode->getDistance(Auth::user()->postcode, $item->user->postcode), 1)}}km
+                                        @endif
                                     </td> 
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         €{{number_format($item->minimum_bid, 2)}}
@@ -146,11 +209,17 @@
                                         </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-normal">
                                         <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{$item->user->postcode}}
+                                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
+                                        {{$item->user->postcode->postcode}}
+                                        -
+                                        {{$item->user->postcode->woonplaats}}
+                                        @if(Auth::user())
+                                         - 
+                                        {{number_format($item->user->postcode->getDistance(Auth::user()->postcode, $item->user->postcode), 1)}}km
+                                        @endif
                                     </td> 
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         €{{number_format($item->minimum_bid, 2)}}

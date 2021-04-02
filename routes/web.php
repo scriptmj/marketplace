@@ -55,6 +55,9 @@ Route::get('/user/messages/{user}', 'App\Http\Controllers\UserController@viewMes
 Route::post('/category', 'App\Http\Controllers\CategoryController@store')->middleware('auth')->name('category.store');
 Route::get('/category/{category}/items', 'App\Http\Controllers\CategoryController@getItemsByCategory')->middleware('auth')->name('item.bycategory');
 
+Route::post('/distance', 'App\Http\Controllers\ItemController@searchByDistance')->middleware('auth')->name('item.searchbydistance');
+Route::post('/keyword', 'App\Http\Controllers\ItemController@searchByKeyword')->middleware('auth')->name('item.searchbykeyword');
+
 
 
 Route::get('/dashboard', function () {

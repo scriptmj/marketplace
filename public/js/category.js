@@ -106,4 +106,13 @@ function removeDuplicateCategories(){
     }
 }
 
+function toggleShowDiv(divId){
+    distanceSearchDiv = document.getElementById(divId);
+    if(distanceSearchDiv.getAttribute('class') === 'hidden'){
+        distanceSearchDiv.setAttribute('class', 'show');
+    } else if(distanceSearchDiv.getAttribute('class') === 'show'){
+        distanceSearchDiv.setAttribute('class', 'hidden');
+    } 
+}
+
 removeDuplicateCategories();

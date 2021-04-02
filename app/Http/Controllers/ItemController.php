@@ -173,6 +173,31 @@ class ItemController extends Controller
         $notification->save();
     }
 
+    function searchByDistance(){
+        $this->validateDistance();
+        $distance = request('distanceKm');
+        $postcodesWithinRange = Auth::user()->postcode->getPostcodesByDistance($distance);
+        $usersWithinRange = User::whereIn('postcode_id', $postcodesWithinRange)->get();
+        $userIDs = new Collection();
+        foreach($usersWithinRange as $user){
+            $userIDs->push($user->id);
+        }
+        $itemsWithinRange = null;
+        if($usersWithinRange->count() == 1){
+            $itemsWithinRange = Item::where('user_id', $userIDs)->orderByDESC('created_at')->paginate(10);
+        } else if($usersWithinRange->count() > 1){
+            $itemsWithinRange = Item::whereIn('user_id', $userIDs)->orderByDESC('created_at')->paginate(10);
+        }
+        $categories = Category::get();
+        $view = View::make('item.overview', ['items' => $itemsWithinRange, 'categories' => $categories]);
+        $sections = $view->renderSections();
+        return $sections['page'];
+    }
+
+    function searchByKeyword(){
+        //TODO Fill in
+    }
+
     //Validators
     function validateItem(){
         return request()->validate([
@@ -193,6 +218,12 @@ class ItemController extends Controller
     function validateBid($validMinimum){
         return request()->validate([
             'bid' =>    'required|numeric|min:'.$validMinimum,
+        ]);
+    }
+
+    function validateDistance(){
+        return request()->validate([
+            'distanceKm' => 'required|numeric',
         ]);
     }
 }
