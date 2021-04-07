@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Item;
 use App\Models\ChatMessage;
 use App\Models\Notification;
+use App\Models\Invoice;
 use Illuminate\Database\Eloquent\Collection;
 
 class User extends Authenticatable
@@ -96,6 +97,10 @@ class User extends Authenticatable
         $sortedColl = $coll->sortByDesc('created_at');
         //dd($coll->sortByDesc('created_at'));
         return $sortedColl->first();
+    }
+
+    public function hasUnpaidInvoices(){
+        return Invoice::where('user', $this->id)->where('paid', false)->count() > 0;
     }
 
     public function hasUnreadMessages(){

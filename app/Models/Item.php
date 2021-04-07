@@ -76,4 +76,8 @@ class Item extends Model
     public function categories(){
         return $this->belongsToMany('App\Models\Category');
     }
+
+    public function invoices(){
+        return $this->hasMany('App\Models\Invoice');
+    }
 }

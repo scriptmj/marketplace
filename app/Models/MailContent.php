@@ -17,4 +17,25 @@ class MailContent extends Model
         'sent',
         'notification',
     ];
+    
+    public function getRecipient(){
+        return $this->belongsTo('App\Models\User', 'recipient', 'id');
+    }
+
+    public function getItem(){
+        return $this->belongsTo('App\Models\Item', 'item', 'id');
+    }
+    
+    public function getNotification(){
+        return $this->belongsTo('App\Models\Notification', 'notification', 'id');
+    }
+
+    public function getSender(){
+        return $this->belongsTo('App\Models\User', 'sender', 'id');
+    }
+    
+    public function getChat(){
+        return $this->belongsTo('App\Models\ChatMessage', 'chat', 'id');
+    }
+
 }

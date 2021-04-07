@@ -55,16 +55,16 @@
     <title>New Notification</title>
 </head>
 <body>
-<h3>Dear {{$recipient->name}},</h3>
+<h3>Dear {{$mailContent->getRecipient->name}},</h3>
 <h4>You have a new notification</h4>
     <div class="card w-50">
-        <h6 class="card-subtitle">Sent on: {{$notification->created_at}}.</h6>
-        @if($item != null)
-            <strong>Regarding item:</strong> <a class="card-link" href="{{route('item.view', $item)}}">{{$item->item_name}}</a>
+        <h6 class="card-subtitle">Sent on: {{$mailContent->getNotification->created_at}}.</h6>
+        @if($mailContent->getItem != null)
+            <strong>Regarding item:</strong> <a class="card-link" href="{{route('item.view', $mailContent->getItem)}}">{{$mailContent->getItem->item_name}}</a>
             <br />
         @endif
         <strong>Message:</strong>
-        <p class="card-text">{{$notification->message}}</p>
+        <p class="card-text">{{$mailContent->getNotification->message}}</p>
         <br />
         <a href="{{route('user.notifications')}}">
             <strong>Login</strong>

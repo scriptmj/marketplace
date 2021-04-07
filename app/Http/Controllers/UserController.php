@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\Offer;
 use App\Models\ChatMessage;
 use App\Models\MailContent;
+use App\Models\Invoice;
 use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
@@ -86,6 +87,11 @@ class UserController extends Controller
         $chat->save();
         $this->prepareEmail($chat);
         return redirect(route('profile.view', $user));
+    }
+
+    public function getInvoices(){
+        $invoices = Invoice::where('user', Auth::user()->id)->paginate(10);
+        return view('user.invoices', ['invoices' => $invoices]);
     }
 
     private function prepareEmail($chat){

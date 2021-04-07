@@ -9,6 +9,7 @@ use App\Models\Offer;
 use App\Models\Notification;
 use App\Models\Category;
 use App\Models\MailContent;
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -135,6 +136,7 @@ class ItemController extends Controller
             if($item->sold){
                 return view('error', ['error' => "This item is already marked as sold."]); 
             }
+            $this->checkPriceForTax($item);
             $this->handleNotifications($item);
             $item->sold = true;
             $item->marked_as_sold = Carbon::now();
@@ -142,6 +144,23 @@ class ItemController extends Controller
             return redirect(route('item.view', ['item' =>$item]));
         } else {
             return view('error', ['error' => "You do not own this item."]); 
+        }
+    }
+
+    private function checkPriceForTax(Item $item){
+        $winningBid = $item->getHighestBid();
+        if($winningBid->price > 500){
+            $invoice = new Invoice();
+            $invoice->user = $item->user->id;
+            $invoice->item = $item->id;
+            $invoice->price = round($winningBid->price/20, 2);
+            $invoice->deadline = Carbon::now()->addMonthNoOverflow();
+            $invoice->save();
+            $message = 
+                "You have sold ".$item->item_name." for over €500, which means you owe the platform 5% of your earnings. 
+                For this item this means a charge of €".$invoice->price." is due within 30 days of this notification.
+                Please view and pay your invoice via the 'Invoice' menu.";
+            $this->notifyUser($item, $item->user, $message);
         }
     }
 

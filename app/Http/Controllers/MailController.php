@@ -13,18 +13,19 @@ use App\Mail\NewNotification;
 
 class MailController extends Controller
 {
-    public function sendMailNewMessage(MailContent $mailContent){
-        $message = new NewMessage($mailContent);
-        Mail::to($message->recipient->email)->send($message);
-        $mailContent->sent = true;
-        $mailContent->update();
-    }
 
-    public function sendMailNewNotification(MailContent $mailContent){
-        $message = new NewNotification($mailContent);
-        Mail::to($message->recipient->email)->send($message);
-        $mailContent->sent = true;
-        $mailContent->update();
+    public function sendMail(MailContent $mailContent){
+        if($mailContent->notification != null){
+            $message = new NewNotification($mailContent);
+            Mail::to($mailContent->getRecipient->email)->send($message);
+            $mailContent->sent = true;
+            $mailContent->update();
+        } elseif($mailContent->chat != null){
+            $message = new NewMessage($mailContent);
+            Mail::to($mailContent->getRecipient->email)->send($message);
+            $mailContent->sent = true;
+            $mailContent->update();
+        }
     }
 }
 

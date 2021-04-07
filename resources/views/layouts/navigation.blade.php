@@ -36,6 +36,12 @@
                         <div class="rounded-full h-2 w-2 bg-red-700 border-red-700 m-1"></div>
                         @endif
                     </x-nav-link>
+                    @if(Auth::user()->hasUnpaidInvoices())
+                    <x-nav-link :href="route('user.invoices')" :active="request()->routeIs('user.invoices')">
+                        {{ __('Invoices') }}
+                        <div class="rounded-full h-2 w-2 bg-red-700 border-red-700 m-1"></div>
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 

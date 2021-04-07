@@ -60,8 +60,9 @@ Route::post('/distance', 'App\Http\Controllers\ItemController@searchByDistance')
 Route::post('/keyword', 'App\Http\Controllers\ItemController@searchByKeyword')->middleware('auth')->name('item.searchbykeyword');
 
 
-Route::get('/sendmail/{mail}', 'App\Http\Controllers\MailController@sendMailNewMessage')->middleware('auth')->name('mail.send');
-Route::get('/sendnotification/{mail}', 'App\Http\Controllers\MailController@sendMailNewNotification')->middleware('auth')->name('notification.send');
+Route::get('/sendmail/{mail}', 'App\Http\Controllers\MailController@sendMail')->middleware('auth')->name('mail.send');
+
+Route::get('/user/invoices', 'App\Http\Controllers\UserController@getInvoices')->middleware('auth')->name('user.invoices');
 
 
 Route::get('/dashboard', function () {

@@ -22,9 +22,10 @@ class NewNotification extends Mailable
      */
     public function __construct(MailContent $mailContent)
     {
-        $this->recipient = User::find($mailContent->recipient);
-        $this->notification = Notification::find($mailContent->notification);
-        $this->item = Item::find($mailContent->item);
+        $this->mailContent = $mailContent;
+        // $this->recipient = User::find($mailContent->recipient);
+        // $this->notification = Notification::find($mailContent->notification);
+        // $this->item = Item::find($mailContent->item);
     }
 
     /**
@@ -36,9 +37,10 @@ class NewNotification extends Mailable
     {
         return $this->view('emails.newnotificationmail')
             ->with([
-                 'recipient' => $this->recipient, 
-                 'notification' => $this->notification, 
-                 'item' => $this->item,
+                'mailContent' => $this->mailContent,
+                //  'recipient' => $this->recipient, 
+                //  'notification' => $this->notification, 
+                //  'item' => $this->item,
                 ]);
     }
 }

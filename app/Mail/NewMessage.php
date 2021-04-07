@@ -22,10 +22,11 @@ class NewMessage extends Mailable
      */
     public function __construct(MailContent $mailContent)
     {
-        $this->recipient = User::find($mailContent->recipient);
-        $this->sender = User::find($mailContent->sender);
-        $this->chat = ChatMessage::find($mailContent->chat);
-        $this->item = Item::find($mailContent->item);
+        $this->mailContent = $mailContent;
+        // $this->recipient = User::find($mailContent->recipient);
+        // $this->sender = User::find($mailContent->sender);
+        // $this->chat = ChatMessage::find($mailContent->chat);
+        // $this->item = Item::find($mailContent->item);
     }
 
     /**
@@ -37,10 +38,11 @@ class NewMessage extends Mailable
     {
         return $this->view('emails.newmessagemail')
             ->with([
-                 'recipient' => $this->recipient, 
-                 'sender' => $this->sender,
-                 'chat' => $this->chat, 
-                 'item' => $this->item
+                'mailContent' => $this->mailContent,
+                //  'recipient' => $this->recipient, 
+                //  'sender' => $this->sender,
+                //  'chat' => $this->chat, 
+                //  'item' => $this->item
                 ]);
     }
 }
