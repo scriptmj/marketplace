@@ -7,11 +7,14 @@ use App\Models\User;
 use App\Models\Item;
 use App\Models\Offer;
 use App\Models\ChatMessage;
+use App\Models\MailContent;
+use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserController extends Controller
 {
+
     public function viewProfile(User $user){
         return view('profile.profile', ['user' => $user]);
     }
@@ -81,7 +84,18 @@ class UserController extends Controller
         $chat->message = request('message');
         $chat->item_ref = $item->id;
         $chat->save();
+        $this->prepareEmail($chat);
         return redirect(route('profile.view', $user));
+    }
+
+    private function prepareEmail($chat){
+        $mailContent = new MailContent();
+        $mailContent->recipient = $chat->to;
+        $mailContent->sender = $chat->from;
+        $mailContent->chat = $chat->id;
+        $mailContent->item = $chat->item_ref;
+        $mailContent->save();
+        return redirect(route('mail.send', $mailContent));
     }
     
     public function getMessages(){

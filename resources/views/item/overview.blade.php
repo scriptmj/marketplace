@@ -42,7 +42,8 @@
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 type="number" 
                                 name="distanceKm" 
-                                id="distanceKm">
+                                id="distanceKm"
+                                placeholder="Enter distance in km">
                                 <button 
                                 type="submit" 
                                 class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -67,7 +68,8 @@
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 type="text" 
                                 name="keyword" 
-                                id="keyword">
+                                id="keyword"
+                                placeholder="Enter keyword">
                                 <button 
                                 type="submit" 
                                 class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -129,8 +131,6 @@
                                         <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
-                                        {{$item->user->postcode->postcode}}
-                                        -
                                         {{$item->user->postcode->woonplaats}}
                                         @if(Auth::user())
                                          - 

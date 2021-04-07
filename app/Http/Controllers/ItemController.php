@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Offer;
 use App\Models\Notification;
 use App\Models\Category;
+use App\Models\MailContent;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -171,19 +172,30 @@ class ItemController extends Controller
         $notification->item_id = $item->id;
         $notification->message = $message;
         $notification->save();
+        $this->prepareEmail($notification);
     }
 
+    private function prepareEmail($notification){
+        $mailContent = new MailContent();
+        $mailContent->recipient = $notification->user_id;
+        $mailContent->notification = $notification->id;
+        $mailContent->item = $notification->item_id;
+        $mailContent->save();
+        return redirect(route('mail.send', $mailContent));
+    }
+
+    //Searches items within range of the user's personal postcode and given distance in KM.
     function searchByDistance(){
-        $this->validateDistance();
+        $this->validateDistance(); //Validates distance input to avoid SQL Injection.
         $distance = request('distanceKm');
-        $postcodesWithinRange = Auth::user()->postcode->getPostcodesByDistance($distance);
-        $usersWithinRange = User::whereIn('postcode_id', $postcodesWithinRange)->get();
+        $postcodesWithinRange = Auth::user()->postcode->getPostcodesByDistance($distance); //Gets all postcodes (id) within range.
+        $usersWithinRange = User::whereIn('postcode_id', $postcodesWithinRange)->get(); //Gets all users within this postcode range.
         $userIDs = new Collection();
         foreach($usersWithinRange as $user){
-            $userIDs->push($user->id);
+            $userIDs->push($user->id); //Creates new collection with only ID's of users within range for iteration.
         }
         $itemsWithinRange = null;
-        if($usersWithinRange->count() == 1){
+        if($usersWithinRange->count() == 1){ //Different query needed for amount of users within range. Gets the items posted by these users.
             $itemsWithinRange = Item::where('user_id', $userIDs)->orderByDESC('created_at')->paginate(10);
         } else if($usersWithinRange->count() > 1){
             $itemsWithinRange = Item::whereIn('user_id', $userIDs)->orderByDESC('created_at')->paginate(10);
@@ -195,7 +207,12 @@ class ItemController extends Controller
     }
 
     function searchByKeyword(){
-        //TODO Fill in
+        $keyword = $this->validateKeyword()['keyword']; //Validated the keyword
+        $items = Item::where('item_name', 'like', '%'.$keyword.'%')->paginate(10); //Searches all items that contain the given word or letters
+        $categories = Category::get();
+        $view = View::make('item.overview', ['items' => $items, 'categories' => $categories]);
+        $sections = $view->renderSections();
+        return $sections['page'];
     }
 
     //Validators
@@ -217,13 +234,18 @@ class ItemController extends Controller
 
     function validateBid($validMinimum){
         return request()->validate([
-            'bid' =>    'required|numeric|min:'.$validMinimum,
+            'bid' => 'required|numeric|min:'.$validMinimum,
         ]);
     }
 
     function validateDistance(){
         return request()->validate([
             'distanceKm' => 'required|numeric',
+        ]);
+    }
+    function validateKeyword(){
+        return request()->validate([
+            'keyword' => 'required|string',
         ]);
     }
 }

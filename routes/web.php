@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,6 +59,9 @@ Route::get('/category/{category}/items', 'App\Http\Controllers\CategoryControlle
 Route::post('/distance', 'App\Http\Controllers\ItemController@searchByDistance')->middleware('auth')->name('item.searchbydistance');
 Route::post('/keyword', 'App\Http\Controllers\ItemController@searchByKeyword')->middleware('auth')->name('item.searchbykeyword');
 
+
+Route::get('/sendmail/{mail}', 'App\Http\Controllers\MailController@sendMailNewMessage')->middleware('auth')->name('mail.send');
+Route::get('/sendnotification/{mail}', 'App\Http\Controllers\MailController@sendMailNewNotification')->middleware('auth')->name('notification.send');
 
 
 Route::get('/dashboard', function () {
