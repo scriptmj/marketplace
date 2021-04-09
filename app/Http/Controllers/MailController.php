@@ -15,17 +15,18 @@ class MailController extends Controller
 {
 
     public function sendMail(MailContent $mailContent){
-        if($mailContent->notification != null){
-            $message = new NewNotification($mailContent);
-            Mail::to($mailContent->getRecipient->email)->send($message);
-            $mailContent->sent = true;
-            $mailContent->update();
-        } elseif($mailContent->chat != null){
-            $message = new NewMessage($mailContent);
-            Mail::to($mailContent->getRecipient->email)->send($message);
-            $mailContent->sent = true;
-            $mailContent->update();
+        if($mailContent->sent == false){
+            if($mailContent->notification != null){
+                $message = new NewNotification($mailContent);
+                Mail::to($mailContent->getRecipient->email)->send($message);
+                $mailContent->sent = true;
+                $mailContent->update();
+            } elseif($mailContent->chat != null){
+                $message = new NewMessage($mailContent);
+                Mail::to($mailContent->getRecipient->email)->send($message);
+                $mailContent->sent = true;
+                $mailContent->update();
+            }
         }
     }
 }
-

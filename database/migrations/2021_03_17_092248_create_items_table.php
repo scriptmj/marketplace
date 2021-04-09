@@ -24,6 +24,8 @@ class CreateItemsTable extends Migration
             $table->float('minimum_bid')->default(0);
             $table->boolean('sold')->default(false);
             $table->timestamp('marked_as_sold')->nullable();
+            $table->boolean('promoted')->default(false);
+            $table->timestamp('promoted_until')->nullable();
         });
     }
 

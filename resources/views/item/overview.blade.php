@@ -114,7 +114,11 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($items as $item)
-                                    <tr>
+                                    @if($item->promoted)
+                                    <tr class="bg-green-50">
+                                    @else
+                                    </tr>
+                                    @endif
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                         <div class="flex-shrink-0 h-20 w-20">

@@ -29,7 +29,7 @@
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           <a href="{{route('item.view', $invoice->item)}}">
-            {{ucfirst($invoice->getItem->item_name)}}
+            {{ucfirst($invoice->item->item_name)}}
           </a>
         </dd>
       </div>
@@ -39,6 +39,18 @@
         </dt>
         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
           {{$invoice->price}}
+        </dd>
+      </div>
+      <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-sm font-medium text-gray-500">
+          Pay now
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+        <a 
+        href="{{route('payment.invoice', $invoice)}}"
+        class="text-indigo-600 hover:text-indigo-900">
+          Pay
+          </a>
         </dd>
       </div>
     </dl>
@@ -58,4 +70,5 @@
             </div>
         </div>
     </div>
+
 </x-app-layout>

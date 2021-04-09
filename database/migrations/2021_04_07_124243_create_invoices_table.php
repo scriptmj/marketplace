@@ -22,12 +22,15 @@ class CreateInvoicesTable extends Migration
             $table->timestamp('deadline')->nullable();
             $table->boolean('paid')->default(false);
             $table->timestamp('paid_on')->nullable();
+            $table->unsignedBigInteger('payment_id')->nullable();
+            $table->boolean('item_promotion')->default(false);
         });
 
         Schema::table('invoices', function (Blueprint $table) {
-            $table->foreign('user')->references('id')->on('users');
-            $table->foreign('item')->references('id')->on('items');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('item_id')->references('id')->on('items');
         });
+
     }
 
     /**

@@ -95,12 +95,11 @@ class User extends Authenticatable
         $messagesTo = ChatMessage::where('to', $otherUser)->where('from', $loggedUser)->orderBy('created_at', 'DESC')->limit(1)->get();
         $coll = collect([$messagesFrom->first(), $messagesTo->first()]);
         $sortedColl = $coll->sortByDesc('created_at');
-        //dd($coll->sortByDesc('created_at'));
         return $sortedColl->first();
     }
 
     public function hasUnpaidInvoices(){
-        return Invoice::where('user', $this->id)->where('paid', false)->count() > 0;
+        return Invoice::where('user_id', $this->id)->where('paid', false)->count() > 0;
     }
 
     public function hasUnreadMessages(){

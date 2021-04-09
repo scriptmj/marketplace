@@ -19,7 +19,7 @@ class ItemController extends Controller
 {
     //Overview
     function home(){
-        $items = Item::where('sold', false)->orderBy('created_at', 'DESC')->paginate(10);
+        $items = Item::where('sold', false)->orderBy('created_at', 'DESC')->orderBy('promoted_until', 'desc')->paginate(10);
         $categories = Category::get();
         $view = View::make('item.overview', ['items' => $items, 'categories' => $categories]);
         $sections = $view->renderSections();
@@ -30,9 +30,9 @@ class ItemController extends Controller
         }
     }
 
-    //View each item
+    //View each item seperately
     function viewItem(Item $item){
-        $item->times_viewed++;
+        $item->times_viewed++; //Increases item views before showing the item.
         $item->update();
         return view('item.view', ['item' =>$item]);
     }
@@ -146,13 +146,13 @@ class ItemController extends Controller
             return view('error', ['error' => "You do not own this item."]); 
         }
     }
-
+    //Checks sold item for price tax
     private function checkPriceForTax(Item $item){
         $winningBid = $item->getHighestBid();
         if($winningBid->price > 500){
             $invoice = new Invoice();
-            $invoice->user = $item->user->id;
-            $invoice->item = $item->id;
+            $invoice->user_id = $item->user->id;
+            $invoice->item_id = $item->id;
             $invoice->price = round($winningBid->price/20, 2);
             $invoice->deadline = Carbon::now()->addMonthNoOverflow();
             $invoice->save();
@@ -164,6 +164,7 @@ class ItemController extends Controller
         }
     }
 
+    //Notifies users who interacted with the item after the item is marked as sold.
     function handleNotifications(Item $item){
         $buyer = $item->getHighestBid()->user;
         $allOffers = $item->offers;
@@ -185,6 +186,7 @@ class ItemController extends Controller
         }
     }
 
+    //Sends notification by input
     function notifyUser(Item $item, User $user, $message){
         $notification = new Notification();
         $notification->user_id = $user->id;
@@ -194,6 +196,7 @@ class ItemController extends Controller
         $this->prepareEmail($notification);
     }
 
+    //Prepares an e-mail after notification has been sent.
     private function prepareEmail($notification){
         $mailContent = new MailContent();
         $mailContent->recipient = $notification->user_id;
@@ -215,9 +218,9 @@ class ItemController extends Controller
         }
         $itemsWithinRange = null;
         if($usersWithinRange->count() == 1){ //Different query needed for amount of users within range. Gets the items posted by these users.
-            $itemsWithinRange = Item::where('user_id', $userIDs)->orderByDESC('created_at')->paginate(10);
+            $itemsWithinRange = Item::where('user_id', $userIDs)->where('sold', false)->orderByDESC('created_at')->paginate(10);
         } else if($usersWithinRange->count() > 1){
-            $itemsWithinRange = Item::whereIn('user_id', $userIDs)->orderByDESC('created_at')->paginate(10);
+            $itemsWithinRange = Item::whereIn('user_id', $userIDs)->where('sold', false)->orderByDESC('created_at')->paginate(10);
         }
         $categories = Category::get();
         $view = View::make('item.overview', ['items' => $itemsWithinRange, 'categories' => $categories]);
@@ -225,9 +228,10 @@ class ItemController extends Controller
         return $sections['page'];
     }
 
+    //Searches item by keyword
     function searchByKeyword(){
         $keyword = $this->validateKeyword()['keyword']; //Validated the keyword
-        $items = Item::where('item_name', 'like', '%'.$keyword.'%')->paginate(10); //Searches all items that contain the given word or letters
+        $items = Item::where('item_name', 'like', '%'.$keyword.'%')->where('sold', false)->paginate(10); //Searches all items that contain the given word or letters
         $categories = Category::get();
         $view = View::make('item.overview', ['items' => $items, 'categories' => $categories]);
         $sections = $view->renderSections();

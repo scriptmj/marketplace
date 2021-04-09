@@ -9,13 +9,17 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user', 'price', 'deadline', 'paid', 'paid_on', 'item'];
+    protected $fillable = ['user_id', 'price', 'deadline', 'paid', 'paid_on', 'item_id', 'payment_id'];
 
-    public function getUser(){
-        return $this->belongsTo('App\Models\User', 'user', 'id');
+    public function user(){
+        return $this->belongsTo('App\Models\User');
     }
 
-    public function getItem(){
-        return $this->belongsTo('App\Models\Item', 'item', 'id');
+    public function item(){
+        return $this->belongsTo('App\Models\Item');
+    }
+
+    public function payment(){
+        return $this->hasOne('App\Models\Payment');
     }
 }

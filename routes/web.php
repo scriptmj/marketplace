@@ -62,7 +62,10 @@ Route::post('/keyword', 'App\Http\Controllers\ItemController@searchByKeyword')->
 
 Route::get('/sendmail/{mail}', 'App\Http\Controllers\MailController@sendMail')->middleware('auth')->name('mail.send');
 
-Route::get('/user/invoices', 'App\Http\Controllers\UserController@getInvoices')->middleware('auth')->name('user.invoices');
+Route::get('/user/invoices', 'App\Http\Controllers\PaymentController@getInvoices')->middleware('auth')->name('user.invoices');
+Route::get('/pay/{invoice}', 'App\Http\Controllers\PaymentController@payInvoice')->middleware('auth')->name('payment.invoice');
+Route::post('/pay/{invoice}', 'App\Http\Controllers\PaymentController@storePayment')->middleware('auth')->name('payment.store');
+Route::get('/promote/{item}', 'App\Http\Controllers\PaymentController@promote')->middleware('auth')->name('payment.promote');
 
 
 Route::get('/dashboard', function () {
