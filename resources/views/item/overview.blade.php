@@ -35,15 +35,41 @@
                         class="inline-flex items-center px-2 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white">
                             Search by distance
                         </button>
+                        <div id="distance-errors">
+                        @error('distanceKm')
+                            <p class="help-block">{{$errors->first('distanceKm')}}</p>
+                        @enderror
+                        @error('fromPostcode')
+                            <p class="help-block">{{$errors->first('fromPostcode')}}</p>
+                        @enderror
+                        </div>
                         <div id="distance-search" class="hidden">
                             <form action="{{route('item.searchbydistance')}}" method="POST">
                             @csrf
                                 <input 
-                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                class="mt-1 w-20 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 type="number" 
                                 name="distanceKm" 
                                 id="distanceKm"
-                                placeholder="Enter distance in km">
+                                placeholder="Distance">
+                                km from
+                                @if(Auth::user())
+                                <input 
+                                class="mt-1 w-20 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                type="number" 
+                                name="fromPostcode" 
+                                id="fromPostcode"
+                                value="{{Auth::user()->postcode->postcode}}"
+                                placeholder="postcode">
+                                @else
+                                <input 
+                                class="mt-1 w-20 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                type="number" 
+                                max="9999"
+                                name="fromPostcode" 
+                                id="fromPostcode"
+                                placeholder="postcode">
+                                @endif
                                 <button 
                                 type="submit" 
                                 class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -81,6 +107,12 @@
                         <hr />
                     </div>
 
+                    <div>
+                        @if(isset($contentHeader))
+                        {{$contentHeader}}
+                        @endif
+                    </div>
+
 
                     <div class="flex flex-col" id="contentDiv">
                         <div class="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -96,7 +128,7 @@
                                         Description
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Postcode
+                                        Location
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Minimum bid
@@ -135,8 +167,13 @@
                                         <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
+                                    {{$item->user->postcode->postcode}}
+                                        -
                                         {{$item->user->postcode->woonplaats}}
-                                        @if(Auth::user())
+                                        @if(isset($enteredPostcode))
+                                         - 
+                                        {{number_format($item->user->postcode->getDistance($enteredPostcode, $item->user->postcode), 1)}}km
+                                        @elseif(Auth::user())
                                          - 
                                         {{number_format($item->user->postcode->getDistance(Auth::user()->postcode, $item->user->postcode), 1)}}km
                                         @endif
@@ -164,7 +201,7 @@
                             </div>
                         </div>
                         </div>
-                        @if($items->links())
+                        @if($items->isNotEmpty() && $items->links())
                         {{$items->links()}}
                     @endif
                     @section('content')
@@ -182,7 +219,7 @@
                                         Description
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Postcode
+                                        Location
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Minimum bid
@@ -220,7 +257,10 @@
                                         {{$item->user->postcode->postcode}}
                                         -
                                         {{$item->user->postcode->woonplaats}}
-                                        @if(Auth::user())
+                                        @if(isset($enteredPostcode))
+                                         - 
+                                        {{number_format($item->user->postcode->getDistance($enteredPostcode, $item->user->postcode), 1)}}km
+                                        @elseif(Auth::user())
                                          - 
                                         {{number_format($item->user->postcode->getDistance(Auth::user()->postcode, $item->user->postcode), 1)}}km
                                         @endif

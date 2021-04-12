@@ -54,10 +54,10 @@ Route::get('/user/messages', 'App\Http\Controllers\UserController@getMessages')-
 Route::get('/user/messages/{user}', 'App\Http\Controllers\UserController@viewMessage')->middleware('auth')->name('message.view');
 
 Route::post('/category', 'App\Http\Controllers\CategoryController@store')->middleware('auth')->name('category.store');
-Route::get('/category/{category}/items', 'App\Http\Controllers\CategoryController@getItemsByCategory')->middleware('auth')->name('item.bycategory');
+Route::get('/category/{category}/items', 'App\Http\Controllers\CategoryController@getItemsByCategory')->name('item.bycategory');
 
-Route::post('/distance', 'App\Http\Controllers\ItemController@searchByDistance')->middleware('auth')->name('item.searchbydistance');
-Route::post('/keyword', 'App\Http\Controllers\ItemController@searchByKeyword')->middleware('auth')->name('item.searchbykeyword');
+Route::post('/distance', 'App\Http\Controllers\ItemController@searchByDistance')->name('item.searchbydistance');
+Route::post('/keyword', 'App\Http\Controllers\ItemController@searchByKeyword')->name('item.searchbykeyword');
 
 
 Route::get('/sendmail/{mail}', 'App\Http\Controllers\MailController@sendMail')->middleware('auth')->name('mail.send');

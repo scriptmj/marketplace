@@ -10,6 +10,7 @@ use App\Models\Notification;
 use App\Models\Category;
 use App\Models\MailContent;
 use App\Models\Invoice;
+use App\Models\Postcode;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -210,20 +211,25 @@ class ItemController extends Controller
     function searchByDistance(){
         $this->validateDistance(); //Validates distance input to avoid SQL Injection.
         $distance = request('distanceKm');
-        $postcodesWithinRange = Auth::user()->postcode->getPostcodesByDistance($distance); //Gets all postcodes (id) within range.
+        $enteredPostcode = Postcode::where('postcode', request('fromPostcode'))->first();
+        $postcodesWithinRange = $enteredPostcode->getPostcodesByDistance($distance); //Gets all postcodes (id) within range.
         $usersWithinRange = User::whereIn('postcode_id', $postcodesWithinRange)->get(); //Gets all users within this postcode range.
         $userIDs = new Collection();
         foreach($usersWithinRange as $user){
             $userIDs->push($user->id); //Creates new collection with only ID's of users within range for iteration.
         }
-        $itemsWithinRange = null;
+        $itemsWithinRange = new Collection();
         if($usersWithinRange->count() == 1){ //Different query needed for amount of users within range. Gets the items posted by these users.
             $itemsWithinRange = Item::where('user_id', $userIDs)->where('sold', false)->orderByDESC('created_at')->paginate(10);
         } else if($usersWithinRange->count() > 1){
             $itemsWithinRange = Item::whereIn('user_id', $userIDs)->where('sold', false)->orderByDESC('created_at')->paginate(10);
         }
         $categories = Category::get();
-        $view = View::make('item.overview', ['items' => $itemsWithinRange, 'categories' => $categories]);
+        $view = View::make('item.overview', [
+            'items' => $itemsWithinRange, 
+            'categories' => $categories, 
+            'enteredPostcode' => $enteredPostcode,
+            'contentHeader' => "Searching by distance: ".$distance."km from ".$enteredPostcode->woonplaats]);
         $sections = $view->renderSections();
         return $sections['page'];
     }
@@ -233,7 +239,10 @@ class ItemController extends Controller
         $keyword = $this->validateKeyword()['keyword']; //Validated the keyword
         $items = Item::where('item_name', 'like', '%'.$keyword.'%')->where('sold', false)->paginate(10); //Searches all items that contain the given word or letters
         $categories = Category::get();
-        $view = View::make('item.overview', ['items' => $items, 'categories' => $categories]);
+        $view = View::make('item.overview', [
+            'items' => $items, 
+            'categories' => $categories,
+            'contentHeader' => "Searching by keyword: ".$keyword]);
         $sections = $view->renderSections();
         return $sections['page'];
     }
@@ -264,6 +273,7 @@ class ItemController extends Controller
     function validateDistance(){
         return request()->validate([
             'distanceKm' => 'required|numeric',
+            'fromPostcode' => 'required|numeric|exists:4pp,postcode',
         ]);
     }
     function validateKeyword(){

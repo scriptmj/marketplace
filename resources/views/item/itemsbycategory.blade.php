@@ -1,5 +1,9 @@
 @section('content')
-                    <div class="flex flex-col">
+<div>
+                        @if(isset($contentHeader))
+                        {{$contentHeader}}
+                        @endif
+                        <div class="flex flex-col" id="contentDiv">
                         <div class="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -13,7 +17,7 @@
                                         Description
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Postcode
+                                        Location
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Minimum bid
@@ -31,7 +35,11 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($items as $item)
-                                    <tr>
+                                    @if($item->promoted)
+                                    <tr class="bg-green-50">
+                                    @else
+                                    </tr>
+                                    @endif
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                         <div class="flex-shrink-0 h-20 w-20">
@@ -48,8 +56,13 @@
                                         <div class="text-sm text-gray-900">{{$item->short_description}}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-900">
-                                        {{$item->user->postcode->postcode}}
-                                        @if(Auth::user())
+                                    {{$item->user->postcode->postcode}}
+                                        -
+                                        {{$item->user->postcode->woonplaats}}
+                                        @if(isset($enteredPostcode))
+                                         - 
+                                        {{number_format($item->user->postcode->getDistance($enteredPostcode, $item->user->postcode), 1)}}km
+                                        @elseif(Auth::user())
                                          - 
                                         {{number_format($item->user->postcode->getDistance(Auth::user()->postcode, $item->user->postcode), 1)}}km
                                         @endif
@@ -77,7 +90,7 @@
                             </div>
                         </div>
                         </div>
-                        @if($items->links())
+                        @if($items->isNotEmpty() && $items->links())
                         {{$items->links()}}
-                    @endif
+                        @endif
                         @endsection
